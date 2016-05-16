@@ -1,40 +1,37 @@
 var router = require('express').Router();
 var Promise = require('bluebird');
-var var Hotel = models.Hotel;
-models = require('../../models');
+var models = require('../../models');
+var Hotel = models.Hotel;
 var Restaurant = models.Restaurant;
 var Activity = models.Activity;
 var Place = models.Place;
 
-router.get('/hotels',function(req,res,next){
-  Hotel.findAll({})
-  .then(function(hotels){
-    res.json(hotels.map(function(item){
-      return item.name;
-    }));
+router.get('/',function(req,res,next){
+  var hotelList = Hotel.findAll({
+    include: [Place]
+  });
+
+  var restaurantList = Restaurant.findAll({
+    include: [Place]
+  });
+
+  var activityList = Activity.findAll({
+    include: [Place]
+  });
+
+  Promise.all(
+    [hotelList, restaurantList, activityList])
+  .spread(function(hotelList, restaurantList, activityList) {
+    res.json({
+      hotels: hotelList,
+      restaurants: restaurantList,
+      activities: activityList
+    });
   })
-  .catch(next);
-  
+    .catch(next);
+
 });
 
-router.get('/restaurants',function(req,res,next){
-  Restaurant.findAll({})
-  .then(function(restaurants){
-    res.json(restaurants.map(function(item){
-      return item.name;
-    }));
-  })
-  .catch(next);
-});
 
-router.get('/activities',function(req,res,next){
-  Activity.findAll({})
-  .then(function(activity){
-    res.json(activity.map(function(item){
-      return item.name;
-    }));
-  })
-  .catch(next);
-});
 
 module.exports = router;
