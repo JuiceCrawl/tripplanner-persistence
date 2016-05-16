@@ -57,6 +57,7 @@ $(function initializeMap (){
     return marker
   }
 
+/*
   function makeOptions(attractionType) {
     var select = $(`#${attractionType}-choices`)
     
@@ -71,7 +72,7 @@ $(function initializeMap (){
   makeOptions('hotel');
   makeOptions('restaurant');
   makeOptions('activity');
-
+*/
  
   var dayTemplate = `
           <section class="day">
