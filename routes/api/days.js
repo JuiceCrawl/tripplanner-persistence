@@ -31,10 +31,10 @@ router.get('/:id', function(req, res, next) {
 router.post('/:id', function(req, res, next) {
   var id = req.params.id;
   Day.create( {
-    number: id
+    number: +id
   })
   .then(function(day) {
-    res.sendStatus(200);
+    res.json(day);
   });
 });
 

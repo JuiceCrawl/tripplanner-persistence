@@ -93,6 +93,58 @@ $(function initializeMap (){
             </div>            
           </section>
     `
+
+$('#day-add').click(function addDay() {
+
+
+var lastIndex = $('section.day').last().data('index')
+    console.log(lastIndex) ;// Are you an array?
+
+    var ourIndex = lastIndex + 1;
+
+    
+    // 1. Create a new day section based off dayTemplate
+    var day = $(dayTemplate);
+    day[0].dataset.index = ourIndex;
+
+    // Create a button with the right number
+    var button = $(`<button class="btn btn-circle day-btn current-day" data-day=${ourIndex}>${ourIndex}</button>`)
+    $(this).before(button)
+    
+
+  $.ajax({
+    method: 'POST',
+    url: '/api/days/' + ourIndex,
+    success: function(dayInstance) {
+      // Find the index of the last day section
+    day[0].dataset.id = dayInstance.id;
+    // 2. Append it to the #itinerary
+    $('#itinerary').append(day)
+    
+    // 3. Unselect all days
+    $('.day').removeClass('selected')
+
+    // 3a. select the one we just appended.
+    $('#itinerary > .day').last().addClass('selected')
+
+    
+    
+    // 5. Deselect all day buttons
+    $('.day-buttons > button').removeClass('current-day')
+    
+    // 6. Select the one we just added
+    button.addClass('current-day')      
+    },
+    error: function(err) {
+      console.log(err)
+    }
+
+    
+});
+});
+
+
+  /*  
   $('#day-add').click(function addDay() {
     // Find the index of the last day section
     var lastIndex = $('section.day').last().data('index')
@@ -151,7 +203,8 @@ $(function initializeMap (){
     // Update the index display
     $('#day-title-index').text(this.dataset.day)
   })
-  
+  */
+  /*
   $(document.body).on('click', 'button[data-action="addSelectionToTrip"]', function(event) {
     console.log(this, event)
     var dst = $(this.dataset.destinationList)
@@ -178,6 +231,7 @@ $(function initializeMap (){
                                option.attraction.place.location)
     });
   });
+*/
 
   $(document.body).on('click', 'button[data-action="deleteFromTrip"]', function(event) {
     // jQuery's closest function ascends the DOM tree to find the nearest ancestor matching
